@@ -58,8 +58,6 @@ hold on;
 scatter(x, y, 'r');
 xlim([0 W]);
 ylim([0 H]);
-hold off
-figure
 
 % œ» —≈À»
 
@@ -70,10 +68,12 @@ pxY = zeros(1, 360);
 pxXcopy = zeros(1, 360);
 pxYcopy = zeros(1, 360);
 
-pxX = round(x / pxSize);
-pxY = round(y / pxSize);
-pxXcopy = round(xcopy / pxSize);
-pxYcopy = round(ycopy / pxSize);
+pxX = ceil((x) / pxSize);
+pxY = ceil((y) / pxSize);
+pxXcopy = ceil((xcopy) / pxSize);
+pxYcopy = ceil((ycopy) / pxSize);
+
+image(100, 10, 1) = 1;
 
 for it = 1 : length(pxX)
    image(pxY(it), pxX(it), [1 1 1]) = 1; 
@@ -88,14 +88,16 @@ end
 M = [cos(phi) -sin(phi); sin(phi) cos(phi)];
 v = [x - W/2; y - H/2];
 vrot = (v' * M)';
-% hold on;
-% scatter(vrot(1, :), vrot(2, :), 'g');
+hold on;
+scatter(vrot(1, :) + W/2, vrot(2, :) + H/2, 'g');
 
-pxXrot = round((vrot(1, :) + W/2) / pxSize);
-pxYrot = round((vrot(2, :) + H/2) / pxSize);
+pxXrot = ceil((vrot(1, :) + W/2) / pxSize);
+pxYrot = ceil((vrot(2, :) + H/2) / pxSize);
 
+itj = length(pxXrot);
 for it = 1 : length(pxXrot)
    image(pxYrot(it), pxXrot(it), [3 3 3]) = 1; 
+   itj = itj - 1;
 end
 
 %% —ÏÂ˘ÂÌËÂ
@@ -103,16 +105,16 @@ end
 r = tan(theta) * h;
 vrot(1, :) = vrot(1, :) + (r * cos(phi));
 vrot(2, :) = vrot(2, :) + (r * sin(phi));
-% figure('Position', [(screenSize(3) - plotSize)/2 (screenSize(4) - plotSize)/2 plotSize plotSize]);
-% scatter(vrot(1, :), vrot(2, :), '+')
-% xlim([-H/2 H/2]);
-% ylim([-W/2 W/2]);
+figure('Position', [(screenSize(3) - plotSize)/2 (screenSize(4) - plotSize)/2 plotSize plotSize]);
+scatter(vrot(1, :), vrot(2, :), '+')
+xlim([-H/2 H/2]);
+ylim([-W/2 W/2]);
 
-pxXbias = round((vrot(1, :) + W/2) / pxSize);
-pxYbias = round((vrot(2, :) + H/2) / pxSize);
+pxXbias = ceil((vrot(1, :) + H/2) / pxSize);
+pxYbias = ceil((vrot(2, :) + W/2) / pxSize);
 
 for it = 1 : length(pxXrot)
-   image(pxYbias(it), pxXbias(it), [1 2 1]) = 1; 
+   image(pxXbias(it), pxYbias(it), [1 2 1]) = 1; 
 end
 
 imshow(image);
